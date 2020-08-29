@@ -1,9 +1,9 @@
 {
   "name": "double-dispatch",
-  "version": "1.3.0",
+  "version": "0.0.1",
   "description": "Double dispatch javascript builder",
   "main": "index.js",
-  "repository": "https://github.com/jindra12/binomial-heap.git",
+  "repository": "https://github.com/jindra12/double-dispatch.git",
   "author": "Jan Jindráček",
   "license": "MIT",
   "man": ["./README.md"],
