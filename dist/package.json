@@ -1,6 +1,6 @@
 {
   "name": "double-dispatch",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "Double dispatch javascript builder",
   "main": "index.js",
   "repository": "https://github.com/jindra12/double-dispatch.git",

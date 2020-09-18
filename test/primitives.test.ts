@@ -57,4 +57,16 @@ describe("Can distinguish between numbers, strings and booleans", () => {
         expect(new Ext().dispatch(BigInt(1))).toBe('1');
         expect(new Ext().dispatch(Symbol('4'))).toBe('symbol Symbol(4)');
     });
+    test("Can dispatch on empty object", () => {
+        const Ext = doubleDispatch(Basic)
+            .push([
+                [Number],
+                value => `this is number: ${value}`,
+            ]).push([
+                [Object],
+                () => 'this is an object',
+            ]).resolve();
+        expect(new Ext().dispatch(1)).toBe('this is number: 1');
+        expect(new Ext().dispatch({})).toBe('this is an object');
+    })
 });

@@ -1,5 +1,7 @@
+export type ArrayOf<T> = [ExtConstructor<T>];
+
 export type Constructor<T = {}> = (new (...args: any[]) => T);
-export type ExtConstructor<T = {}> = Constructor<T> | BigIntConstructor | SymbolConstructor;
+export type ExtConstructor<T = {}> = Constructor<T> | BigIntConstructor | SymbolConstructor | ArrayOf<T>;
 
 export type Appenders<A1, A2 = undefined, A3 = undefined, A4 = undefined, A5 = undefined> = A2 extends undefined
     ? [A1]
@@ -53,9 +55,13 @@ export type ClearInstanceType<T> = T extends NumberConstructor
                             T extends SymbolConstructor
                             ? symbol
                             : (
-                                T extends Constructor
-                                ? InstanceType<T>
-                                : never
+                                T extends [infer U]
+                                ? Array<ClearInstanceType<U>>
+                                : (
+                                    T extends Constructor
+                                    ? InstanceType<T>
+                                    : never
+                                )
                             )
                         )
                     )

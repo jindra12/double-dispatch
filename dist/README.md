@@ -82,6 +82,27 @@ describe("Can apply double-dispatch to class structures", () => {
 
 ```
 
+## Example of specialized syntax for matching arrays of items (so far, only one-typed arrays are supported)
+
+```typescript
+
+const Ext = doubleDispatch(Basic)
+    .push([
+        [[String]],
+        value => value.length / 2,
+    ]).push([
+        [[Number]],
+        value => value.length,
+    ]).push([
+        [Array],
+        () => 'is an array',
+    ]).resolve();
+expect(new Ext().dispatch([0, 1, 2])).toBe(3);
+expect(new Ext().dispatch(['Hello', 'James'])).toBe(1);
+expect(new Ext().dispatch([])).toBe('is an array');
+
+```
+
 For more examples, you can checkout the unit tests in my repo :) .
 
 ## Footer

@@ -1,5 +1,29 @@
 import { Constructor, Callables } from '../types';
 
+const typeCompare = (value: any, against: any) => {
+    switch (typeof value) {
+        case 'string':
+            return against === String;
+        case 'bigint':
+            return against === BigInt;
+        case 'boolean':
+            return against === Boolean;
+        case 'number':
+            return against === Number;
+        case 'symbol':
+            return against === Symbol;
+        case 'function':
+        case 'object':
+            if (Array.isArray(value) && value.length === 0) {
+                return against === Array;
+            }
+            return value instanceof (against as any);
+    }
+    return false;
+}
+
+const arrayTypeCompare = (value: any[], against: any) => value.every(part => typeCompare(part, against));
+
 export const doubleDispatch = <T extends Constructor>(toBuild: T) => {
     const callables: Callables<T, never, never> = {
         callables: [],
@@ -19,22 +43,10 @@ export const doubleDispatch = <T extends Constructor>(toBuild: T) => {
                             if (args[i] === undefined) {
                                 return false;
                             }
-                            switch (typeof args[i]) {
-                                case 'string':
-                                    return c === String;
-                                case 'bigint':
-                                    return c === BigInt;
-                                case 'boolean':
-                                    return c === Boolean;
-                                case 'number':
-                                    return c === Number;
-                                case 'symbol':
-                                    return c === Symbol;
-                                case 'function':
-                                case 'object':
-                                    return args[i] instanceof (c as any);
+                            if (Array.isArray(args[i]) && Array.isArray(c) && args[i].length > 0 && (c as any).length === 1) {
+                                return arrayTypeCompare(args[i], c[0]);
                             }
-                            return false;
+                            return typeCompare(args[i], c);
                         }, true)) {
                             const bound: Function = (callables.callables[i][1] as any);
                             return bound.call(this, ...(args as any));
